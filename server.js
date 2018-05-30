@@ -4,24 +4,26 @@ var http = require('http');
 var express = require('express');
 var app = express();
 var util = require('util');
-superagent.get('http://bbs.mycraft.cc/thread-17373-1-1.html')
-    .end(function (req, res) {
-        // console.log(res.text);
-        var $ = cheerio.load(res.text);
-        var namesOrigin = $(".pi>.authi>a");
-        var contents = $(".t_f");
-        var names = new Array();
-        for (var i = 0; i < namesOrigin.length; i++) {
-            names[i] = (namesOrigin[i].firstChild.data);
-        }
-        //var namesJson = util.inspect(names);
-        app.get('/', function (req, res) {
-            console.log('Homepage');
-            //res.send('Hello homepage');
+app.get('/', function (appreq, appres) {
+    console.log('Homepage');
+    //res.send('Hello homepage');
+    superagent.get(appreq.query.targetUrl)
+        .end(function (req, res) {
+            // console.log(res.text);
+            var $ = cheerio.load(res.text);
+            var namesOrigin = $(".pi>.authi>a");
+            var contents = $(".t_f");
+            var names = new Array();
+            for (var i = 0; i < namesOrigin.length; i++) {
+                names[i] = (namesOrigin[i].firstChild.data);
+            }
+            //var namesJson = util.inspect(names);
+            appres.jsonp(names);
 
-            res.jsonp(names);
         });
-    });
+
+});
+
 // http.createServer(function (request, response) {
 //     response.writeHead(200, { 'Content-Type': ' text/plain' });
 //     response.end('Hello');

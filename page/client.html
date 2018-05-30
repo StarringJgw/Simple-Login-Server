@@ -9,7 +9,9 @@
 </head>
 
 <body>
+    <input id="inputBox" value="http://bbs.mycraft.cc/thread-17373-1-1.html">
     <button onclick="ajax()">button</button>
+    <div id="textArea"></div>
 </body>
 
 <script src="../jquery.js"></script>
@@ -18,7 +20,7 @@
     function newElement(data) {
         var x = document.createElement("h1")
         x.innerText = data;
-        document.body.appendChild(x);
+        document.getElementById("textArea").appendChild(x);
     }
     function ajax() {
         $.ajax({
@@ -26,11 +28,13 @@
             dataType: 'jsonp',
             type: 'get',
             data: {
-                test: 'ajax'
+                targetUrl: document.getElementById("inputBox").value
             },
             success: function (data) {
                 console.log(data);
+                document.getElementById("textArea").innerHTML = "";
                 data.forEach(element => {
+
                     newElement(element);
                 });
             }
