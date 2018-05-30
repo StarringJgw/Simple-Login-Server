@@ -1,19 +1,45 @@
 var superagent = require('superagent');
 var cheerio = require('cheerio');
 var http = require('http');
+var express = require('express');
+var app = express();
+var util = require('util');
 superagent.get('http://bbs.mycraft.cc/thread-17373-1-1.html')
     .end(function (req, res) {
         // console.log(res.text);
         var $ = cheerio.load(res.text);
-        var names = $(".pi>.authi>a");
-        var contents = $(".t_f")
-        for (var i = 0; i < names.length; i++) {
-            console.log(names[i].firstChild.data);
+        var namesOrigin = $(".pi>.authi>a");
+        var contents = $(".t_f");
+        var names = new Array();
+        for (var i = 0; i < namesOrigin.length; i++) {
+            names[i] = (namesOrigin[i].firstChild.data);
         }
-    });
-http.createServer(function (request, response) {
-    response.writeHead(200, { 'Content-Type': ' text/plain' });
-    response.end('Hello');
-}).listen(8888);
+        //var namesJson = util.inspect(names);
+        app.get('/', function (req, res) {
+            console.log('Homepage');
+            //res.send('Hello homepage');
 
-console.log('Server running at http://127.0.0.1:8888/');
+            res.jsonp(names);
+        });
+    });
+// http.createServer(function (request, response) {
+//     response.writeHead(200, { 'Content-Type': ' text/plain' });
+//     response.end('Hello');
+// }).listen(8888);
+
+// console.log('Server running at http://127.0.0.1:8888/');
+
+// app.get('/', function (req, res) {
+//     console.log('Homepage');
+//     res.send('Hello homepage');
+//     res.send(JSON.stringify(names));
+// });
+app.get('/123', function (req, res) {
+    console.log('123');
+    res.send('Hello 123');
+});
+app.use(express.static('page'))
+var server = app.listen(8888, function () {
+    var host = server.address().address;
+    console.log(host);
+})

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ajaxtest</title>
+</head>
+
+<body>
+    <button onclick="ajax()">button</button>
+</body>
+
+<script src="../jquery.js"></script>
+
+<script>
+    function newElement(data) {
+        var x = document.createElement("h1")
+        x.innerText = data;
+        document.body.appendChild(x);
+    }
+    function ajax() {
+        $.ajax({
+            url: 'http://127.0.0.1:8888/',
+            dataType: 'jsonp',
+            type: 'get',
+            data: {
+                test: 'ajax'
+            },
+            success: function (data) {
+                console.log(data);
+                data.forEach(element => {
+                    newElement(element);
+                });
+            }
+        })
+    };  
+</script>
+
+</html>
