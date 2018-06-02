@@ -4,7 +4,6 @@ var http = require('http');
 var express = require('express');
 var app = express();
 var util = require('util');
-var searchId;
 app.get('/', function (appreq, appres) {
     console.log('Homepage');
     //res.send('Hello homepage');
@@ -49,7 +48,7 @@ app.get('/search', function (appreq, appres) {
                 searchItem += $(this).html();
                 console.log(searchItem);
             });
-            searchItem += $(".pgs.cl.mbm").html();
+            //searchItem += $(".pgs.cl.mbm").html();
             appres.jsonp(searchItem);
         })
 })
