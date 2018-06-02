@@ -5,41 +5,101 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ajaxtest</title>
+    <title>test</title>
+    <style>
+        hr {
+            border-bottom: 5px solid black;
+        }
+    </style>
 </head>
 
 <body>
     <input id="inputBox" value="http://bbs.mycraft.cc/thread-17373-1-1.html">
     <button onclick="ajax()">button</button>
-    <div id="textArea"></div>
+
+    <input id="searchBox" value="qwe">
+    <button onclick="search()">search</button>
+
+    <div id="mainArea"></div>
+
+
 </body>
 
 <script src="../jquery.js"></script>
 
 <script>
+    var names = new Array();
+    var texts = new Array();
     function newElement(data) {
         var x = document.createElement("h1")
         x.innerText = data;
         document.getElementById("textArea").appendChild(x);
     }
-    function ajax() {
-        $.ajax({
+    async function ajax() {
+
+        var f2 = await $.ajax({
             url: 'http://127.0.0.1:8888/',
             dataType: 'jsonp',
             type: 'get',
             data: {
-                targetUrl: document.getElementById("inputBox").value
+                targetUrl: document.getElementById("inputBox").value,
+                targetType: "names"
             },
             success: function (data) {
                 console.log(data);
-                document.getElementById("textArea").innerHTML = "";
-                data.forEach(element => {
+                names = data;
 
-                    newElement(element);
-                });
+                // document.getElementById("nameArea").innerHTML = "";
+                // data.forEach(element => {
+                //     newElement(element);
+                // });
             }
         })
-    };  
+
+        var f1 = await $.ajax({
+            url: "http://127.0.0.1:8888/",
+            dataType: "jsonp",
+            type: "get",
+            data: {
+                targetUrl: document.getElementById("inputBox").value,
+                targetType: "texts"
+            },
+            success: function (data) {
+                console.log(data);
+                texts = data;
+
+                // document.getElementById("textArea").innerHTML = "";
+                // data.forEach(element => {
+                //     newElement(element);
+                // });
+            }
+        })
+        var mainArea = document.getElementById("mainArea");
+        mainArea.innerHTML = "";
+        var size = names.length;
+        mainArea.innerHTML += "Current User: " + names[0] + "<p>";
+        mainArea.innerHTML += "Last Ip: " + texts[0] + "<p>";
+        mainArea.appendChild(document.createElement("hr"));
+        for (var i = 1; i <= size; i++) {
+            mainArea.innerHTML += "User: " + names[i] + "<p>";
+            mainArea.innerHTML += "Comment:" + texts[i];
+            mainArea.appendChild(document.createElement("hr"));
+
+        }
+    };
+    async function search() {
+        var f3 = await $.ajax({
+            url: "http://127.0.0.1:8888/search",
+            dataType: "jsonp",
+            type: "get",
+            data: {
+                keyWord: document.getElementById("searchBox").value
+            },
+            success: function (data) {
+                document.getElementById("mainArea").innerHTML = data;
+            }
+        })
+    }
 </script>
 
 </html>
