@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<p>
+    <input id="inputName">Name</p>
+<p>
+    <input id="inputPassword">Password</p>
+<p>
+    <input id="inputEmail">inputEmail</p>
+<button onclick="upload()">upload</button>
+
+<body>
+    <script>
+        // fetch('http://localhost:8888/login.html')
+        //     .then(function (response) {
+        //         return response.text();
+        //     })
+        //     .then(function (myJson) {
+        //         console.log(myJson);
+        //     })
+        function upload() {
+            var data = {
+                username: document.getElementById("inputName").value,
+                password: document.getElementById("inputPassword").value,
+                email: document.getElementById("inputEmail").value
+            }
+            fetch('http://localhost:8888/signin', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: new Headers({
+                    'Content-type': 'application/json'
+                })
+            }).then(res => res.json().then(function (data) {
+                console.log(data);
+            }));
+            // .catch(error => console.log('Error: ', error))
+            // .then(response => {
+            //     console.log('Success', response)
+            //     // alert(response.text());
+            // })
+        }
+    </script>
+</body>
+
+</html>
