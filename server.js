@@ -4,6 +4,7 @@ var http = require('http');
 var express = require('express');
 var app = express();
 var util = require('util');
+app.listen(3333);
 app.get('/', function (appreq, appres) {
     console.log('Homepage');
     //res.send('Hello homepage');
@@ -28,8 +29,12 @@ app.get('/', function (appreq, appres) {
             }
             //var namesJson = util.inspect(names);
             switch (appreq.query.targetType) {
-                case "names": appres.jsonp(names); break;
-                case "texts": appres.jsonp(texts); break;
+                case "names":
+                    appres.jsonp(names);
+                    break;
+                case "texts":
+                    appres.jsonp(texts);
+                    break;
             }
 
 
@@ -69,7 +74,7 @@ app.get('/123', function (req, res) {
     console.log('123');
     res.send('Hello 123');
 });
-app.use(express.static('page'))
+app.use(express.static(__dirname + '/page'))
 var server = app.listen(8888, function () {
     var host = server.address().address;
     console.log(host);
