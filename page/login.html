@@ -7,15 +7,31 @@
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<p>
-    <input id="inputName">Name</p>
-<p>
-    <input id="inputPassword">Password</p>
-<p>
-    <input id="inputEmail">inputEmail</p>
-<button onclick="upload()">upload</button>
 
 <body>
+    <p>
+        <input id="inputName">Name</p>
+    <p>
+        <input id="inputPassword">Password</p>
+    <p>
+        <input id="inputEmail">Email</p>
+    <button onclick="upload()">upload</button>
+    <button onclick="login()">login</button>
+
+    <div>
+        <p>Forget Password?</p>
+        <p>
+            <input id="inputNameF">Name</p>
+        <p>
+            <input id="inputEmailF">Email</p>
+        <p>
+            <input id="inputPasswordF">newPassword
+        </p>
+        <button onclick="findPassword()">Submit</button>
+    </div>
+    <P id='textArea'></P>
+
+
     <script>
         // fetch('http://localhost:8888/login.html')
         //     .then(function (response) {
@@ -37,13 +53,54 @@
                     'Content-type': 'application/json'
                 })
             }).then(res => res.json().then(function (data) {
-                console.log(data);
+                if (data == null) {
+                    document.getElementById('textArea').innerText = 'Success!';
+                } else
+                    document.getElementById('textArea').innerText = 'Error: ' + data.sqlMessage;
             }));
-            // .catch(error => console.log('Error: ', error))
-            // .then(response => {
-            //     console.log('Success', response)
-            //     // alert(response.text());
-            // })
+        }
+        // .catch(error => console.log('Error: ', error))
+        // .then(response => {
+        //     console.log('Success', response)
+        //     // alert(response.text());
+        // })
+        function login() {
+            var data = {
+                username: document.getElementById("inputName").value,
+                password: document.getElementById("inputPassword").value,
+            }
+            fetch('http://localhost:8888/login', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: new Headers({
+                    'Content-type': 'application/json'
+                })
+            }).then(res => res.json().then(function (data) {
+                document.getElementById('textArea').innerText = data;
+            }))
+
+        }
+
+        function findPassword() {
+            var data = {
+                username: document.getElementById("inputNameF").value,
+                email: document.getElementById("inputEmailF").value,
+                password: document.getElementById("inputPasswordF").value
+            }
+            fetch('http://localhost:8888/findPassword', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: new Headers({
+                    'Content-type': 'application/json'
+                })
+            }).then(res => res.json().then(function (data) {
+                if (data) {
+                    document.getElementById('textArea').innerText = data;
+                } else {
+                    document.getElementById('textArea').innerText = 'Succeessfully changed the password';
+                }
+            }))
+
         }
     </script>
 </body>
